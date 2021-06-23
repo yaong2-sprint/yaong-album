@@ -1,10 +1,9 @@
-export default class SearchBar {
+export default class SearchSection {
   constructor({ $target, onSearch }) {
     this.section = document.createElement('section');
     this.section.className = "search-section";
     this.onSearch = onSearch;
     $target.appendChild(this.section);
-    console.log('test')
 
     this.render();
   }
@@ -21,8 +20,8 @@ export default class SearchBar {
     searchBox.autofocus = true;
     searchBox.placeholder = "enter the cat breed";
 
-    searchBox.addEventListener("change", e => {
-      console.log(e.value);
+    searchBox.addEventListener("change", event => {
+      this.onSearch(event.target.value);
     })
 
     wrapper.appendChild(searchBox);

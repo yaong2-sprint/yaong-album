@@ -1,8 +1,7 @@
-import SearchBar from './components/SearchBar.js';
+import ResultSection from './components/ResultSection.js';
+import SearchSection from './components/SearchSection.js';
+import { catApi } from './utils/catApi.js';
 
-const onSearch = (word) => {
-  console.log(word)
-};
 
 export default class App {
   constructor({ $app }) {
@@ -12,9 +11,19 @@ export default class App {
   }
 
   render() {
-    const searchBar = new SearchBar({
+    const onSearch = async (word) => {
+      const data = await catApi(word);
+      console.log(data.length)
+      resultSection.setState(data.length)
+    };
+
+    const searchSection = new SearchSection({
       $target: this.$app,
       onSearch
+    });
+
+    const resultSection = new ResultSection({
+      $target: this.$app,
     });
   }
 }
