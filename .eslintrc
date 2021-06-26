@@ -8,5 +8,5 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "rules": { "import/extensions": 0, "no-unused-vars": 0, "no-new":0  }
+  "rules": { "import/extensions": 0, "no-unused-vars": 0, "no-new":0, "no-use-before-define": 0  }
 }
