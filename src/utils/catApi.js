@@ -1,17 +1,41 @@
-const API_ENDPOINT = "https://api.thecatapi.com/v1";
 import axios from 'axios';
+import CAT_API_URL from '../constants/url.js';
 
-export const catApi = async (keyword) => {
+export const getBreedsIdApi = async (url) => {
   try {
-    const url = `${API_ENDPOINT}/breeds/search?q=${keyword}`
-    const payload = await axios.get(url);
-    console.log(payload.data);
-    return payload.data;
-
+    const response = await axios.get(url);
+    const payload = response.data;
+    return payload;
   } catch (e) {
-    throw {
-      message: e.message,
-      status: e.status,
-    };
+    return e;
+  }
+};
+
+/**
+ *
+ * retrieve and return cat infos user enter
+ */
+export const getCatsInfoApi = async (keyword) => {
+  try {
+    const breeds = await getBreedsIdApi(
+      `${CAT_API_URL}/breeds/search?q=${keyword}`
+    );
+    if (breeds.length) {
+      const requests = breeds.map(async (breed) => {
+        // eslint-disable-next-line no-return-await
+        return await axios.get(
+          `${CAT_API_URL}/images/search?limit=20&breed_ids=${breed.id}`
+        );
+      });
+      const responses = await Promise.all(requests);
+      const catInfoArr = responses.reduce((acc, cur) => {
+        return acc.concat(cur.data);
+      }, []);
+      return catInfoArr;
+    }
+    return [];
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
